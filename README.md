@@ -5,7 +5,7 @@ required to replicate the experiments provided in the paper
 "Using Voice and Biofeedback to Predict User Engagement during 
 Requirements Interviews", currently submitted to 
 the Empirical Software Engineering Journal by: Alessio Ferrari, 
-Thaide Uichapa, Paola Spoletini, Nicole Novielli, Davide Fucci e Daniela Girardi.
+Thaide Uichapa, Paola Spoletini, Nicole Novielli, Davide Fucci and Daniela Girardi.
 
 The code in this project was developed by: Thaide Uichapa, Alessio Ferrari and Davide Fucci. 
 

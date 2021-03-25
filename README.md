@@ -27,6 +27,7 @@ main_multi_set_smote.py uses this folder as data source, and also to produce res
 - Data-imputation: this folder contains all the data for the different experiments, 
 using imputation for the voice data. 
 - Data-no-imputation: this folder contains all the data without imputation.
+- Protocol: protocol description and associated files to replicate the experiment.
 
 **Required Libraries**
 All required libraries are listed in requirements.txt

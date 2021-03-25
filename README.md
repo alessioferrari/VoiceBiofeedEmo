@@ -18,7 +18,8 @@ For any issues, please contact: `alessio.ferrari AT isti.cnr.it`
 can be visualise with this script. 
 - params.py: this includes all the dictionaries for the parameters used in parameter tuning.
 - params_pipeline.py: this includes all the dictionaries for the parameters used in parameter tuning, 
-with the naming required by scikit learn when a Pipeline object is used (in this case, to scale the data). 
+with the naming required by scikit learn when a Pipeline object is used (in this case, to scale the data).
+- Preprint.pdf: preprint of the paper associated to this package. 
 
 **_Folders_** are:
 - Data: this folder is empty. Before runnning the experiment, the files from one of the 

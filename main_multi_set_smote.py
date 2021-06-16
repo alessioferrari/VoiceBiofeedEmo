@@ -32,9 +32,13 @@ VALENCE_VOICE = 'Data/ValenceVoice.csv'
 AROUSAL_COMPLETE = 'Data/ArousalCombine.csv'
 VALENCE_COMPLETE = 'Data/ValenceCombine.csv'
 
-file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
+THREE_LABELS = 'Data/Empatica_3labels-3.csv'
 
-alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
+#file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
+file_list = [THREE_LABELS]
+
+#alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
+alg_names = ['SVM']
 
 tuned_mdl = dict.fromkeys(alg_names)
 
@@ -121,13 +125,15 @@ def create_splits(iter_num, x, y, oversample):
     for i in range(iter_num):
         rand_value = random.SystemRandom().randint(1, 100)
 
-        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.30, random_state=rand_value, shuffle=True,
-                                                            stratify=y)
-        
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.30, random_state=rand_value, shuffle=True, stratify=y)
+
+        #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.1, shuffle=False)
+
         if oversample == 'yes':
-            print("performing oversalmpling")
+
+            print("performing oversampling")
             oversampler = SMOTE(random_state=42)
-            x_train, y_train = oversampler.fit_resample(x, y)
+            x_train, y_train = oversampler.fit_resample(x_train, y_train)
 
         x_train_l.append(x_train)
         x_test_l.append(x_test)

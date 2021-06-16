@@ -126,7 +126,7 @@ def create_splits(iter_num, x, y, oversample):
         if oversample == 'yes':
             print("performing oversalmpling")
             oversampler = SMOTE(random_state=42)
-            x_train, y_train = oversampler.fit_resample(x, y)
+            x_train, y_train = oversampler.fit_resample(x_train, y_train)
 
         x_train_l.append(x_train)
         x_test_l.append(x_test)

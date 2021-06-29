@@ -33,12 +33,10 @@ AROUSAL_COMPLETE = 'ArousalCombine.csv'
 VALENCE_COMPLETE = 'ValenceCombine.csv'
 
 
-#file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
+file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
 
-#alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
+alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
 
-file_list = [AROUSAL_BIOFEEDBACK]
-alg_names = ['SVM']
 
 tuned_mdl = dict.fromkeys(alg_names)
 

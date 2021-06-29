@@ -23,19 +23,21 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 import params_pipeline
 import params 
 
-AROUSAL_BIOFEEDBACK = 'Data/ArousalBiofeedback.csv'
-VALENCE_BIOFEEDBACK = 'Data/ValenceBiofeedback.csv'
+AROUSAL_BIOFEEDBACK = 'ArousalBiofeedback.csv'
+VALENCE_BIOFEEDBACK = 'ValenceBiofeedback.csv'
 
-AROUSAL_VOICE = 'Data/ArousalVoice.csv'
-VALENCE_VOICE = 'Data/ValenceVoice.csv'
+AROUSAL_VOICE = 'ArousalVoice.csv'
+VALENCE_VOICE = 'ValenceVoice.csv'
 
-AROUSAL_COMPLETE = 'Data/ArousalCombine.csv'
-VALENCE_COMPLETE = 'Data/ValenceCombine.csv'
+AROUSAL_COMPLETE = 'ArousalCombine.csv'
+VALENCE_COMPLETE = 'ValenceCombine.csv'
 
 
-file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
+#file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
 
 #alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
+
+file_list = [AROUSAL_BIOFEEDBACK]
 alg_names = ['SVM']
 
 tuned_mdl = dict.fromkeys(alg_names)
@@ -44,6 +46,7 @@ N_SPLITS = 3
 CROSS_VAL = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=random.SystemRandom().randint(1, 100)) #cross validation for hyperparameter tuning
 SCORING = 'f1_macro' #scoring for hyperparameter tuning: https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
 SUBJECT_NUM = 21
+LEAVE_OUT_NUM = 1
 
 
 # ignore all future warnings
@@ -124,7 +127,7 @@ def create_splits_from_file(subject_num, in_file, oversample):
     X, y = read_input(in_file)
     groups = get_subject_groups(in_file)
 
-    gss = GroupShuffleSplit(n_splits=subject_num, test_size=1, random_state=random.SystemRandom().randint(1, 100))
+    gss = GroupShuffleSplit(n_splits=subject_num, test_size=LEAVE_OUT_NUM, random_state=random.SystemRandom().randint(1, 100))
 
     for train_array_idx, test_array_idx in gss.split(X, y, groups):
 
@@ -159,14 +162,22 @@ def init_results_dict():
     return results_dict
 
 def main_run(args):
-    _, oversampling, scaling, params_search = args
+    _, oversampling, scaling, params_search, imputation = args
+
+    result_dir = 'Results'+'-over-['+oversampling+']-scale-['+scaling+']-imp-['+imputation+']'
+    os.mkdir(result_dir)
+
+    if imputation=='yes':
+        dir_name = 'Data-imputation/'
+    else:
+        dir_name = 'Data-no-imputation/'
 
     results_dict = init_results_dict()
 
     for in_file in file_list:
          print('RUNNING on file :' + in_file)
 
-         x_train_l, x_test_l, y_train_l, y_test_l = create_splits_from_file(SUBJECT_NUM, in_file, oversampling)
+         x_train_l, x_test_l, y_train_l, y_test_l = create_splits_from_file(SUBJECT_NUM, os.path.join(dir_name, in_file), oversampling)
 
          for alg_name in alg_names:
              for i in range(SUBJECT_NUM):
@@ -178,7 +189,7 @@ def main_run(args):
                  results_dict[in_file][alg_name][str(i)]['results'], results_dict[in_file][alg_name][str(i)]['confusion'] = run_algorithm(tuned_mdl[alg_name], x_test_l[i], y_test_l[i])
 
     for in_file in file_list:
-        pd.DataFrame.from_dict(results_dict[in_file], orient='index').to_csv(os.path.splitext(in_file)[0] + '-res.csv')
+        pd.DataFrame.from_dict(results_dict[in_file], orient='index').to_csv(os.path.join(result_dir, os.path.splitext(in_file)[0] + '-res.csv'))
 
     print('DONE!')
 
@@ -186,7 +197,7 @@ def main_run(args):
 if __name__ == "__main__":
     args = sys.argv
     if len(args) < 2:
-        print("# 1 --> oversampling (yes) # 2 --> scaling (yes) # 3 --> search (grid) ")
-        args = ['', 'yes', 'yes', 'grid']
+        print("# 1 --> oversampling (yes) # 2 --> scaling (yes) # 3 --> search (grid) # 4 --> imputation (no) ")
+        args = ['', 'yes', 'yes', 'grid', 'no']
     else:print(args)
     main_run(args)

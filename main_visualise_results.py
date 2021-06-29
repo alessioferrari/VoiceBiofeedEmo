@@ -9,8 +9,8 @@ VALENCE_BIOFEEDBACK = 'Data/ValenceBiofeedback-res.csv'
 AROUSAL_VOICE = 'Data/ArousalVoice-res.csv'
 VALENCE_VOICE = 'Data/ValenceVoice-res.csv'
 
-AROUSAL_COMPLETE = 'Data/ArousalCombineComplete-res.csv'
-VALENCE_COMPLETE = 'Data/ValenceCombineComplete-res.csv'
+AROUSAL_COMPLETE = 'Data/ArousalCombine-res.csv'
+VALENCE_COMPLETE = 'Data/ValenceCombine-res.csv'
 
 file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
 

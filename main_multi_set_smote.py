@@ -44,7 +44,7 @@ N_SPLITS = 3
 CROSS_VAL = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=random.SystemRandom().randint(1, 100)) #cross validation for hyperparameter tuning
 SCORING = 'f1_macro' #scoring for hyperparameter tuning: https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
 SUBJECT_NUM = 21
-LEAVE_OUT_NUM = 1
+LEAVE_OUT_NUM = 6
 
 
 # ignore all future warnings

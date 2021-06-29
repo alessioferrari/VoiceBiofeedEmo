@@ -6,7 +6,7 @@ import random
 
 from imblearn.over_sampling import SMOTE
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.model_selection import train_test_split, StratifiedKFold, GroupShuffleSplit
 from sklearn import preprocessing
 from sklearn.pipeline import make_pipeline
 
@@ -32,10 +32,8 @@ VALENCE_VOICE = 'Data/ValenceVoice.csv'
 AROUSAL_COMPLETE = 'Data/ArousalCombine.csv'
 VALENCE_COMPLETE = 'Data/ValenceCombine.csv'
 
-THREE_LABELS = 'Data/Empatica_3labels-3.csv'
 
-#file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
-file_list = [THREE_LABELS]
+file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
 
 #alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
 alg_names = ['SVM']
@@ -45,10 +43,10 @@ tuned_mdl = dict.fromkeys(alg_names)
 N_SPLITS = 3
 CROSS_VAL = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=random.SystemRandom().randint(1, 100)) #cross validation for hyperparameter tuning
 SCORING = 'f1_macro' #scoring for hyperparameter tuning: https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
-ITER_NUM = 10 #number of repetitions
+SUBJECT_NUM = 21
+
 
 # ignore all future warnings
-
 simplefilter(action='ignore', category=FutureWarning)
 
 def read_input(in_file):
@@ -62,7 +60,6 @@ def run_algorithm(model, x_test, y_test):
     results = classification_report(y_test, y_preds, output_dict=True)
     print(results['macro avg'])
     print('accuracy: ' + str(results['accuracy']))
-
     print("confusion matrix")
     confusion_matrix(y_test, y_preds)
     xo = pd.crosstab(y_test, y_preds, rownames=['Actual'], colnames=['Predicted'], margins=True)
@@ -117,17 +114,24 @@ def tune_algorithm(alg_name,x_train, y_train, cv, scoring, tuning_type, scaling)
 
     return mdl
 
+def get_subject_groups(in_file):
+    data = pd.read_csv(in_file)
+    groups = data['folder #'].map(lambda x: str(x).split('.')[0])
+    return groups
 
-
-def create_splits(iter_num, x, y, oversample):
+def create_splits_from_file(subject_num, in_file, oversample):
     x_train_l, x_test_l, y_train_l, y_test_l = [], [], [], []
+    X, y = read_input(in_file)
+    groups = get_subject_groups(in_file)
 
-    for i in range(iter_num):
-        rand_value = random.SystemRandom().randint(1, 100)
+    gss = GroupShuffleSplit(n_splits=subject_num, test_size=1, random_state=random.SystemRandom().randint(1, 100))
 
-        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.30, random_state=rand_value, shuffle=True, stratify=y)
+    for train_array_idx, test_array_idx in gss.split(X, y, groups):
 
-        #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.1, shuffle=False)
+        x_train = X.iloc[train_array_idx]
+        x_test = X.iloc[test_array_idx]
+        y_train = y.iloc[train_array_idx]
+        y_test = y.iloc[test_array_idx]
 
         if oversample == 'yes':
 
@@ -149,23 +153,23 @@ def init_results_dict():
     for file in results_dict.keys():
         results_dict[file] = dict.fromkeys(alg_names)
         for alg in results_dict[file].keys():
-            results_dict[file][alg] = dict.fromkeys(map(str, range(ITER_NUM)))
+            results_dict[file][alg] = dict.fromkeys(map(str, range(SUBJECT_NUM)))
             for item in results_dict[file][alg].keys():
                 results_dict[file][alg][item] = dict({'results': None, 'confusion': None})
     return results_dict
 
 def main_run(args):
     _, oversampling, scaling, params_search = args
+
     results_dict = init_results_dict()
 
     for in_file in file_list:
          print('RUNNING on file :' + in_file)
-         x, y = read_input(in_file)
 
-         x_train_l, x_test_l, y_train_l, y_test_l = create_splits(ITER_NUM, x, y, oversampling)
+         x_train_l, x_test_l, y_train_l, y_test_l = create_splits_from_file(SUBJECT_NUM, in_file, oversampling)
 
          for alg_name in alg_names:
-             for i in range(ITER_NUM):
+             for i in range(SUBJECT_NUM):
                  print('EXECUTION NUMBER: ', i)
 
                  print('Tuning ' + alg_name + '...')

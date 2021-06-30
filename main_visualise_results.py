@@ -12,11 +12,8 @@ VALENCE_VOICE = 'ValenceVoice-res.csv'
 AROUSAL_COMPLETE = 'ArousalCombine-res.csv'
 VALENCE_COMPLETE = 'ValenceCombine-res.csv'
 
-#file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
-#alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
-
-file_list = [AROUSAL_VOICE,VALENCE_VOICE]
-alg_names = ['SVM']
+file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
+alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
 
 
 AVG_TYPE = 'macro avg' #change to weighted avg to have results for weighted average

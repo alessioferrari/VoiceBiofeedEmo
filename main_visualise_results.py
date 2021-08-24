@@ -15,7 +15,6 @@ VALENCE_COMPLETE = 'ValenceCombine-res.csv'
 file_list = [AROUSAL_BIOFEEDBACK,VALENCE_BIOFEEDBACK,AROUSAL_VOICE,VALENCE_VOICE,AROUSAL_COMPLETE,VALENCE_COMPLETE]
 alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
 
-
 AVG_TYPE = 'macro avg' #change to weighted avg to have results for weighted average
 
 in_folder = 'Results-over-[yes]-scale-[yes]-imp-[no]/'

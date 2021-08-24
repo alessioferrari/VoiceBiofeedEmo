@@ -43,7 +43,7 @@ N_SPLITS = 3
 CROSS_VAL = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=random.SystemRandom().randint(1, 100)) #cross validation for hyperparameter tuning
 SCORING = 'f1_macro' #scoring for hyperparameter tuning: https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
 SUBJECT_NUM = 21
-LEAVE_OUT_NUM = 6
+LEAVE_OUT_NUM = 1
 
 
 # ignore all future warnings
@@ -166,8 +166,10 @@ def main_run(args):
 
     if imputation=='yes':
         dir_name = 'Data-imputation/'
-    else:
+    elif imputation=='no':
         dir_name = 'Data-no-imputation/'
+    else:
+        dir_name = 'Data-3-labels/'
 
     results_dict = init_results_dict()
 
@@ -192,9 +194,10 @@ def main_run(args):
 
 
 if __name__ == "__main__":
+    print("Leave-one-subject-out setting")
     args = sys.argv
     if len(args) < 2:
         print("# 1 --> oversampling (yes) # 2 --> scaling (yes) # 3 --> search (grid) # 4 --> imputation (no) ")
-        args = ['', 'yes', 'yes', 'grid', 'no']
+        args = ['', 'yes', 'yes', 'grid', 'three-labels']
     else:print(args)
     main_run(args)

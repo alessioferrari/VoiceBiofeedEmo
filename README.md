@@ -1,7 +1,7 @@
 **Overview**
 
-__In this branch, we perform validation using a leave one subject out setting, in which a part of the subjects involved in
-the experiment is used exclusively for training, and one exclusively for testing. The master branch uses a hold-out setting, with
+__In this branch, we perform validation using a _leave one subject out_ setting, in which a part of the subjects involved in
+the experiment is used exclusively for training, and one subject exclusively for testing. The master branch uses a hold-out setting, with
 70% training and 30% testing split__
 
 This replication package includes all the data and scripts

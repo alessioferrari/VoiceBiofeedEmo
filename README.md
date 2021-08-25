@@ -1,5 +1,9 @@
 **Overview**
 
+__In this branch, we perform validation using a leave one subject out setting, in which a part of the subjects involved in
+the experiment is used exclusively for training, and one exclusively for testing. The master branch uses a hold-out setting, with
+70% training and 30% testing split__
+
 This replication package includes all the data and scripts
 required to replicate the experiments provided in the paper
 "Using Voice and Biofeedback to Predict User Engagement during 
@@ -21,12 +25,10 @@ with the naming required by scikit learn when a Pipeline object is used (in this
 - Preprint.pdf: preprint of the paper associated to this package. 
 
 **_Folders_** are:
-- Data: this folder is empty. Before runnning the experiment, the files from one of the 
-two other folders described below should be copy-pasted in this folder. The script
-main_multi_set_smote.py uses this folder as data source, and also to produce results.
 - Data-imputation: this folder contains all the data for the different experiments, 
 using imputation for the voice data. 
 - Data-no-imputation: this folder contains all the data without imputation.
+- Data-3-labels: this folder contains all the data with 3 labels for valence and arousal.
 - Protocol: protocol description and associated files to replicate the experiment.
 
 **Required Libraries**
@@ -40,24 +42,36 @@ conda create --name <env> --file requirements.txt
 **Usage**
 To run all the experiments, with the different configurations, you need to:
 
-1. Copy in the Data folder all files from Data-imputation OR Data-no-imputation
- 
-2. Run the following command with the different combinations of options:
+1. Run the following command with the different combinations of options:
 
-> python main_multi_set_smote.py <OVERSAMPLING> <SCALING> <SEARCH_TYPE>
+> python main_multi_set_smote.py <OVERSAMPLING> <SCALING> <SEARCH_TYPE> <IMPUTATION>
 
 OVERSAMPLING: 'yes' or 'no', indicates whether you want to apply oversampling with SMOTE
 SCALING: 'yes' or 'no', indicates whether data should be standardized
 SEARCH_TYPE: 'grid' or 'random', indicates the type of search algorithm to use in hyperparameter tuning
+IMPUTATION: 'yes' or 'no' or '3-labels'. Indicates whether the experiments should be run 
+on data with imputation ('yes', folder 'Data-imputation' will be used), without imputation ('no', folder
+'Data-no-imputation' is used, or 3-labels ('3-labels', folder 'Data-3-labels' is used)
 
-3. After each run, results are generated as CSV files in the Data folder, with the 
+The results will be stored in the <RESULT_FOLDER>, named:
+
+> 'Results'+'-over-['+<OVERSAMPLING>+']-scale-['+<SCALING>+']-imp-['+<IMPUTATION>+']'
+
+For example: 
+
+> Results-over-[yes]-scale-[yes]-imp-[no]/
+
+2. After each run, results are generated as CSV files in the Data folder, with the 
 same name of the input files and the '-res' postfix. To visualise a summary of these files,
 run the following command:
 
-> python main_visualise_results.py
+> python main_visualise_results.py <RESULT_FOLDER>
 
-4. The process above need to be repeated each time the command at step 2 is run with
-different options. Please notice that at each run results are overwritten in the Data folder.  
+3. The process above need to be repeated each time the command at step 1 is run with
+different options. 
+
+WARNING: be aware that the option SCALING='no', when using SVM and MLP can lead to overly long computation times,
+as these algorithms are designed to use scaled data. 
 
 
 

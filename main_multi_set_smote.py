@@ -168,8 +168,11 @@ def main_run(args):
         dir_name = 'Data-imputation/'
     elif imputation=='no':
         dir_name = 'Data-no-imputation/'
-    else:
+    elif imputation=='3-labels':
         dir_name = 'Data-3-labels/'
+    else:
+        print('Last param has three options: yes, no, 3-labels')
+        exit(0)
 
     results_dict = init_results_dict()
 
@@ -198,6 +201,6 @@ if __name__ == "__main__":
     args = sys.argv
     if len(args) < 2:
         print("# 1 --> oversampling (yes) # 2 --> scaling (yes) # 3 --> search (grid) # 4 --> imputation (no) ")
-        args = ['', 'yes', 'yes', 'grid', 'three-labels']
+        args = ['', 'yes', 'yes', 'grid', '3-labels']
     else:print(args)
     main_run(args)

@@ -22,11 +22,12 @@ with the naming required by scikit learn when a Pipeline object is used (in this
 
 **_Folders_** are:
 - Data: this folder is empty. Before runnning the experiment, the files from one of the 
-two other folders described below should be copy-pasted in this folder. The script
+three other folders described below should be copy-pasted in this folder. The script
 main_multi_set_smote.py uses this folder as data source, and also to produce results.
 - Data-imputation: this folder contains all the data for the different experiments, 
 using imputation for the voice data. 
 - Data-no-imputation: this folder contains all the data without imputation.
+- Data-3-labels: this folder contains all the data with 3 labels
 - Protocol: protocol description and associated files to replicate the experiment.
 
 **Required Libraries**
@@ -40,7 +41,7 @@ conda create --name <env> --file requirements.txt
 **Usage**
 To run all the experiments, with the different configurations, you need to:
 
-1. Copy in the Data folder all files from Data-imputation OR Data-no-imputation
+1. Copy in the Data folder all files from Data-imputation OR Data-no-imputation OR Data-3-Labels
  
 2. Run the following command with the different combinations of options:
 

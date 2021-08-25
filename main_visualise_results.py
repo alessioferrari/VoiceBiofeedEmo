@@ -1,5 +1,6 @@
 import ast
 import os
+import sys
 
 import pandas as pd
 
@@ -17,10 +18,8 @@ alg_names = ['SVM', 'MLP', 'DTree', 'NB', 'RNN']
 
 AVG_TYPE = 'macro avg' #change to weighted avg to have results for weighted average
 
-in_folder = 'Results-over-[yes]-scale-[yes]-imp-[no]/'
-
-
-def main_visualise_results(in_folder):
+def main_visualise_results(args):
+    _, in_folder = args
 
     for f_name in file_list:
 
@@ -63,4 +62,13 @@ def main_visualise_results(in_folder):
             print('\n')
 
 
-main_visualise_results(in_folder)
+if __name__ == "__main__":
+    print("Visualising Results")
+    args = sys.argv
+    if len(args) < 2:
+        print("Arg # 1 --> Path to Results Folder")
+        args = ['', 'Results-over-[yes]-scale-[yes]-imp-[no]/']
+    else:print(args)
+    main_visualise_results(args)
+
+
